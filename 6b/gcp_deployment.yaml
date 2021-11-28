@@ -1,0 +1,32 @@
+resources:
+- type: compute.v1.instance
+  name: devops-crash-course-deployment-vm
+  properties:
+    zone: us-central1-f
+    machineType: zones/us-central1-f/machineTypes/e2-micro
+    disks:
+    - deviceName: devops-crash-course-deployment-vm
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+        diskSizeGb: 10
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items:
+      - web
+    metadata:
+      items:
+      - key: serial-port-enable
+        value: '1'
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt update
+          sudo apt -y install nginx
+          echo 'Hello world from Crash course DevOps' > /var/www/html/index.html
