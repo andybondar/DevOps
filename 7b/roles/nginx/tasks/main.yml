@@ -1,0 +1,17 @@
+---
+- name: "Install nginx"
+  apt:
+    update_cache: yes
+    name: nginx
+  register: nginx_installed_debian
+  notify: enable nginx service
+
+- name: "Add index file"
+  copy:
+    src: "index.html"
+    dest: "/var/www/html/index.html"
+    mode: 0644
+    owner: www-data
+    group: www-data
+
+  
