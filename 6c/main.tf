@@ -1,43 +1,26 @@
-provider "google" {
-	credentials = "${file("credentials.json")}"
-	project = "devops-crash-course"
-	region  = "us-central1"
-	zone    = "us-central1-c"
-}
-
 resource "google_compute_instance" "nginx_test" {
-    name = "nginxserver"
-    machine_type = "e2-micro"
-    tags = ["http-server"]
+    project = var.project_id
+    name = var.vm_name
+    machine_type = var.vm_type
+    zone = var.zone
+    tags = var.tags
 
     boot_disk {
         initialize_params {
-            image = "debian-cloud/debian-9"
+            image = var.vm_image
         }
     }
 
-    metadata_startup_script ="${file("nginx.sh")}"
+    metadata_startup_script = file(var.vm_bootstrap_script)
 
 	scheduling {
-        preemptible = true
-        automatic_restart = false
+        preemptible = var.vm_preemptible
+        automatic_restart = var.vm_automatic_restart
     }
 
     network_interface {
-        network ="default"
+        network = var.vm_network
         access_config {
         }
     }
-}
-
-resource "google_compute_firewall" "http-server" {
-  name    = "default-allow-http"
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80"]
-  }
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["http-server"]
 }

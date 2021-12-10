@@ -1,0 +1,19 @@
+### Terraform ###
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+crash.log
+
+# Include 'tfplan' files to ignore the plan output of command: terraform plan -out=tfplan
+*tfplan*
+
+# Include 'backend.tf' files to ignore
+*backend.tf*
+
+# Include '*.json' files to ignore
+*.json
+
+### the end of Terraform block ###
